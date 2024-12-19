@@ -1,74 +1,86 @@
-//go:build assert
-// +build assert
-
 package assert
 
 import (
 	"cmp"
 	"fmt"
+	"io"
 	"os"
 )
 
+var Enabled = false
+var Writer io.Writer = os.Stderr
+
+// ContextWindow represents the number of source code lines to display above and
+// below the line that caused the assertion failure.
+var ContextWindow int = 5
+
+// MaxTraceDepth represents the maximum number of stack frames to display in the
+// stack trace.
+var MaxTraceDepth int = 20
+
+// ReturnValue represents the exit code to use when an assertion fails.
+var ReturnValue int = 1 // Not using 42069 requires a lot of self control
+
 func Equals[T comparable](a, b T) {
-	if a != b {
+	if Enabled && a != b {
 		reportFailure("Equals", stacktrace(2), a, b)
 	}
 }
 
 func NotEquals[T comparable](a, b T) {
-	if a == b {
+	if Enabled && a == b {
 		reportFailure("NotEquals", stacktrace(2), a, b)
 	}
 }
 
 func LessThan[T cmp.Ordered](a, b T) {
-	if a >= b {
+	if Enabled && a >= b {
 		reportFailure("LessThan", stacktrace(2), a, b)
 	}
 }
 
 func MoreThan[T cmp.Ordered](a, b T) {
-	if a <= b {
+	if Enabled && a <= b {
 		reportFailure("MoreThan", stacktrace(2), a, b)
 	}
 }
 
 func LessOrEquals[T cmp.Ordered](a, b T) {
-	if a > b {
+	if Enabled && a > b {
 		reportFailure("LessOrEquals", stacktrace(2), a, b)
 	}
 }
 
 func MoreOrEquals[T cmp.Ordered](a, b T) {
-	if a < b {
+	if Enabled && a < b {
 		reportFailure("MoreOrEquals", stacktrace(2), a, b)
 	}
 }
 
 func Nil(v any) {
-	if v != nil {
+	if Enabled && v != nil {
 		reportFailure("Nil", stacktrace(2), v)
 	}
 }
 
 func NotNil(v any) {
-	if v == nil {
+	if Enabled && v == nil {
 		reportFailure("NotNil", stacktrace(2), v)
 	}
 }
 
 func Always(v bool) bool {
-	if !v {
+	if Enabled && !v {
 		reportFailure("Always", stacktrace(2), v)
 	}
-	return true
+	return v
 }
 
 func Never(v bool) bool {
-	if v {
+	if Enabled && v {
 		reportFailure("Never", stacktrace(2), v)
 	}
-	return false
+	return v
 }
 
 func reportFailure(name string, stack []frame, args ...any) {

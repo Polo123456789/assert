@@ -16,8 +16,9 @@ production code anyway.
 Usage
 -----
 
-Add the `assert` tag when building or running the code. If the tag is not
-present, all asserts are nops, and are optimized away by the compiler.
+Set the `Enabled` global variable to `true`. It shouln't add a significant
+amount of overhead when disabled, like how `slog` handles logs of lower
+importance than the current log level.
 
 All asserts are self describing, apart from `Always` and `Never`, which are
 mean to be used like in the SQLite codebase.
