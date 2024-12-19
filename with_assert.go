@@ -73,33 +73,33 @@ func Never(v bool) bool {
 
 func reportFailure(name string, stack []frame, args ...any) {
 	fmt.Fprintln(
-		Writter,
+		Writer,
 		applyAnsi(SectionTitleColor, name+" Assertion Failed:\n"),
 	)
 
-	fmt.Fprintln(Writter, get_context(stack[0]))
+	fmt.Fprintln(Writer, get_context(stack[0]))
 
 	if len(args) != 0 {
-		fmt.Fprintln(Writter, applyAnsi(SectionTitleColor, "Values:\n"))
+		fmt.Fprintln(Writer, applyAnsi(SectionTitleColor, "Values:\n"))
 		for i, arg := range args {
 			fmt.Fprintf(
-				Writter,
+				Writer,
 				"\t%s: %v\n",
 				applyAnsi(ArgumentColor, fmt.Sprintf("Argument %d", i+1)),
 				arg,
 			)
 		}
-		fmt.Fprintln(Writter)
+		fmt.Fprintln(Writer)
 	}
 
-	fmt.Fprintln(Writter, applyAnsi(SectionTitleColor, "Stacktrace:\n"))
+	fmt.Fprintln(Writer, applyAnsi(SectionTitleColor, "Stacktrace:\n"))
 	for _, frame := range stack {
 		fmt.Fprintf(
-			Writter,
+			Writer,
 			"\t%s\n",
 			applyAnsi(StackColor, frame.String()),
 		)
 	}
-	fmt.Fprintln(Writter)
+	fmt.Fprintln(Writer)
 	os.Exit(ReturnValue)
 }

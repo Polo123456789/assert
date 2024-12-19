@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-var Writter io.Writer = os.Stderr
+var Writer io.Writer = os.Stderr
 
 // ContextWindow represents the number of source code lines to display above and
 // below the line that caused the assertion failure.
