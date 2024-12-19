@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"reflect"
 )
 
 var Enabled = false
@@ -57,16 +58,30 @@ func MoreOrEquals[T cmp.Ordered](a, b T) {
 	}
 }
 
-func Nil(v any) {
-	if Enabled && v != nil {
+func Nil[T any](v any) {
+	if Enabled && !isNil(v) {
 		reportFailure("Nil", stacktrace(2), v)
 	}
 }
 
-func NotNil(v any) {
-	if Enabled && v == nil {
+func NotNil[T any](v T) {
+	if Enabled && isNil(v) {
 		reportFailure("NotNil", stacktrace(2), v)
 	}
+}
+
+func isNil(v any) bool {
+	if v == nil {
+		return true
+	}
+
+	switch reflect.TypeOf(v).Kind() {
+	case reflect.Pointer, reflect.Interface, reflect.Map,
+		reflect.Slice, reflect.Chan, reflect.Func:
+		return reflect.ValueOf(v).IsNil()
+	}
+
+	return false
 }
 
 func Always(v bool) bool {
