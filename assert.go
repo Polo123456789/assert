@@ -20,53 +20,53 @@ var ContextWindow int = 5
 var MaxTraceDepth int = 20
 
 // ReturnValue represents the exit code to use when an assertion fails.
-var ReturnValue int = 1 // Not using 42069 requires a lot of self control
+var ReturnValue int = 1
 
-func Equals[T comparable](a, b T) {
+func Equals[T comparable](a, b T, context ...any) {
 	if Enabled && a != b {
-		reportFailure("Equals", stacktrace(2), a, b)
+		reportFailure("Equals", stacktrace(2), a, b, context)
 	}
 }
 
-func NotEquals[T comparable](a, b T) {
+func NotEquals[T comparable](a, b T, context ...any) {
 	if Enabled && a == b {
-		reportFailure("NotEquals", stacktrace(2), a, b)
+		reportFailure("NotEquals", stacktrace(2), a, b, context)
 	}
 }
 
-func LessThan[T cmp.Ordered](a, b T) {
+func LessThan[T cmp.Ordered](a, b T, context ...any) {
 	if Enabled && a >= b {
-		reportFailure("LessThan", stacktrace(2), a, b)
+		reportFailure("LessThan", stacktrace(2), a, b, context)
 	}
 }
 
-func MoreThan[T cmp.Ordered](a, b T) {
+func MoreThan[T cmp.Ordered](a, b T, context ...any) {
 	if Enabled && a <= b {
-		reportFailure("MoreThan", stacktrace(2), a, b)
+		reportFailure("MoreThan", stacktrace(2), a, b, context)
 	}
 }
 
-func LessOrEquals[T cmp.Ordered](a, b T) {
+func LessOrEquals[T cmp.Ordered](a, b T, context ...any) {
 	if Enabled && a > b {
-		reportFailure("LessOrEquals", stacktrace(2), a, b)
+		reportFailure("LessOrEquals", stacktrace(2), a, b, context)
 	}
 }
 
-func MoreOrEquals[T cmp.Ordered](a, b T) {
+func MoreOrEquals[T cmp.Ordered](a, b T, context ...any) {
 	if Enabled && a < b {
-		reportFailure("MoreOrEquals", stacktrace(2), a, b)
+		reportFailure("MoreOrEquals", stacktrace(2), a, b, context)
 	}
 }
 
-func Nil[T any](v any) {
+func Nil(v any, context ...any) {
 	if Enabled && !isNil(v) {
-		reportFailure("Nil", stacktrace(2), v)
+		reportFailure("Nil", stacktrace(2), v, context)
 	}
 }
 
-func NotNil[T any](v T) {
+func NotNil(v any, context ...any) {
 	if Enabled && isNil(v) {
-		reportFailure("NotNil", stacktrace(2), v)
+		reportFailure("NotNil", stacktrace(2), v, context)
 	}
 }
 
