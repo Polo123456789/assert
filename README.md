@@ -1,24 +1,21 @@
 Assert
 ======
 
-To catch my own mistakes.
-
 Example Output
 --------------
 
 ![](./example.png)
 
 **Note:** The display of the source code is heavily inspired by the
-[ztrue/tracerr](https://github.com/ztrue/tracerr) module. Its dependend on
-runing on the machine the code was compiled on. Asserts shouln't be used in
+[ztrue/tracerr](https://github.com/ztrue/tracerr) module. Its dependent on
+running on the machine the code was compiled on. Asserts shouldn't be used in
 production code anyway.
 
 Usage
 -----
 
-Set the `Enabled` global variable to `true`. It shouln't add a significant
-amount of overhead when disabled, like how `slog` handles logs of lower
-importance than the current log level.
+Add the `assert` tag to the build command to include the asserts in the code.
+If the tag is not present, all assert turn into no-ops.
 
 All asserts are self describing, apart from `Always` and `Never`, which are
 mean to be used like in the SQLite codebase.
@@ -37,7 +34,7 @@ mean to be used like in the SQLite codebase.
 Configuration
 -------------
 
-The follwing global variables can be set to change the behavior of the module:
+The following global variables can be set to change the behavior of the module:
 
 ### `Writer`
 
@@ -53,7 +50,7 @@ The maximum number of stack frames to display. Default is `20`.
 
 ### `ReturnValue`
 
-The retun value of the program when an assert fails. Default is `1`.
+The return value of the program when an assert fails. Default is `1`.
 
 ### `SectionTitleColor`
 

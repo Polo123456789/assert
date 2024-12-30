@@ -1,72 +1,60 @@
+//go:build assert
+// +build assert
+
 package assert
 
 import (
 	"cmp"
 	"fmt"
-	"io"
 	"os"
 	"reflect"
 )
 
-var Enabled = false
-var Writer io.Writer = os.Stderr
-
-// ContextWindow represents the number of source code lines to display above and
-// below the line that caused the assertion failure.
-var ContextWindow int = 5
-
-// MaxTraceDepth represents the maximum number of stack frames to display in the
-// stack trace.
-var MaxTraceDepth int = 20
-
-// ReturnValue represents the exit code to use when an assertion fails.
-var ReturnValue int = 1
-
-func Equals[T comparable](a, b T, context ...any) {
-	if Enabled && a != b {
-		reportFailure("Equals", stacktrace(2), a, b, context)
+func Equals[T comparable](a, b T) {
+	if a != b {
+		reportFailure("Equals", stacktrace(2), a, b)
 	}
 }
 
-func NotEquals[T comparable](a, b T, context ...any) {
-	if Enabled && a == b {
-		reportFailure("NotEquals", stacktrace(2), a, b, context)
+func NotEquals[T comparable](a, b T) {
+	if a == b {
+		reportFailure("NotEquals", stacktrace(2), a, b)
 	}
 }
 
-func LessThan[T cmp.Ordered](a, b T, context ...any) {
-	if Enabled && a >= b {
-		reportFailure("LessThan", stacktrace(2), a, b, context)
+func LessThan[T cmp.Ordered](a, b T) {
+	if a >= b {
+		reportFailure("LessThan", stacktrace(2), a, b)
 	}
 }
 
-func MoreThan[T cmp.Ordered](a, b T, context ...any) {
-	if Enabled && a <= b {
-		reportFailure("MoreThan", stacktrace(2), a, b, context)
+func MoreThan[T cmp.Ordered](a, b T) {
+	if a <= b {
+		reportFailure("MoreThan", stacktrace(2), a, b)
 	}
 }
 
-func LessOrEquals[T cmp.Ordered](a, b T, context ...any) {
-	if Enabled && a > b {
-		reportFailure("LessOrEquals", stacktrace(2), a, b, context)
+func LessOrEquals[T cmp.Ordered](a, b T) {
+	if a > b {
+		reportFailure("LessOrEquals", stacktrace(2), a, b)
 	}
 }
 
-func MoreOrEquals[T cmp.Ordered](a, b T, context ...any) {
-	if Enabled && a < b {
-		reportFailure("MoreOrEquals", stacktrace(2), a, b, context)
+func MoreOrEquals[T cmp.Ordered](a, b T) {
+	if a < b {
+		reportFailure("MoreOrEquals", stacktrace(2), a, b)
 	}
 }
 
-func Nil(v any, context ...any) {
-	if Enabled && !isNil(v) {
-		reportFailure("Nil", stacktrace(2), v, context)
+func Nil(v any) {
+	if !isNil(v) {
+		reportFailure("Nil", stacktrace(2), v)
 	}
 }
 
-func NotNil(v any, context ...any) {
-	if Enabled && isNil(v) {
-		reportFailure("NotNil", stacktrace(2), v, context)
+func NotNil(v any) {
+	if isNil(v) {
+		reportFailure("NotNil", stacktrace(2), v)
 	}
 }
 
@@ -85,14 +73,14 @@ func isNil(v any) bool {
 }
 
 func Always(v bool) bool {
-	if Enabled && !v {
+	if !v {
 		reportFailure("Always", stacktrace(2), v)
 	}
 	return v
 }
 
 func Never(v bool) bool {
-	if Enabled && v {
+	if v {
 		reportFailure("Never", stacktrace(2), v)
 	}
 	return v
@@ -112,6 +100,8 @@ func reportFailure(name string, stack []frame, args ...any) {
 			fmt.Fprintf(
 				Writer,
 				"\t%s: %v\n",
+				// Could we possibly print the argument name here? We would need
+				// to parse the source code to get the argument name.
 				applyAnsi(ArgumentColor, fmt.Sprintf("Argument %d", i+1)),
 				arg,
 			)
